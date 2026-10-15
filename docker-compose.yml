@@ -1,0 +1,21 @@
+services:
+  cassandra:
+    image: cassandra:5.0
+    container_name: iot-cassandra
+    environment:
+      CASSANDRA_CLUSTER_NAME: industria
+      MAX_HEAP_SIZE: 1G
+      HEAP_NEWSIZE: 256M
+    ports:
+      - "9042:9042"
+    volumes:
+      - ./cql:/cql:ro
+      - cassandra_data:/var/lib/cassandra
+    healthcheck:
+      test: ["CMD", "cqlsh", "-e", "DESCRIBE KEYSPACES"]
+      interval: 15s
+      timeout: 10s
+      retries: 10
+
+volumes:
+  cassandra_data:
